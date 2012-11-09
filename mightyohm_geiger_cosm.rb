@@ -3,18 +3,14 @@
 
 require 'bundler'
 Bundler.require
+Dir.glob('./models/*').each { |r| require r }
 
 DBNAME 				= "geiger.db"
-CREATE_QUERY 		= "CREATE TABLE IF NOT EXISTS readings (id INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL, created_at INTEGER, cps INTEGER, cpm INTEGER, dose REAL, mode TEXT)"
-CREATE_INDEX_QUERY	= "CREATE INDEX IF NOT EXISTS readings_idx ON readings(created_at)"
 INSERT_QUERY 		= "INSERT INTO readings (created_at, cps, cpm, dose, mode) VALUES (?, ?, ?, ?, ?)"
 
 # setup
 begin
 	@db = SQLite3::Database.new DBNAME
-	@db.execute(CREATE_QUERY)
-	@db.execute(CREATE_INDEX_QUERY);
-
 
 	# launch endpoint thread
 
